@@ -18,6 +18,7 @@ RUN apk add postgresql-dev gcc python3-dev musl-dev zlib-dev jpeg-dev #--(5.2)
 RUN apk add libffi-dev #cffi설치 에러
 
 
+
 #현재 디렉토리의 모든 파일을 컨테이너 내의 /usr/src/app/ 디렉토리로 복사
 COPY . /usr/src/app/
 # install dependencies
