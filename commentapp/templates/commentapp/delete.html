@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <div class="text-center mw-500 m-auto">
+        <div class="m-5">
+            <h4>
+                댓글을 삭제하시겠습니까?:{{ target_comment.content }}
+            </h4>
+        </div>
+        <div>
+            <form action="{% url 'commentapp:delete' pk=target_comment.pk %}" method="post">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger">
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

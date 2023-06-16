@@ -1,0 +1,40 @@
+{% load static %}
+
+    <style>
+    .container {
+        padding:0;
+        margin: auto;
+    }
+    .container div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 1rem;
+        flex-direction: column;
+
+    }
+    .container img{
+        width: 7rem;
+        height:7rem;
+        object-fit : cover;
+        border-radius: 1rem;
+    }
+    </style>
+
+    {% if article_list %}
+        <div class="container">
+            {% for article in article_list %}
+                <a href="{% url 'articleapp:detail' pk=article.pk %}">
+                    {% include 'snippets/card.html' with article=article %}
+                </a>
+            {% endfor %}
+        </div>
+        <script src="{% static 'js/magicgrid.js' %}"></script>
+
+    {% endif %}
+    {% include 'snippets/pagination.html' with page_obj=page_obj %}
+    <div style="text-align: center">
+        <a href="{% url 'articleapp:create' %}" class="btn btn-dark col-3 mt-3 mb-3">
+            게시판 생성
+        </a>
+    </div>

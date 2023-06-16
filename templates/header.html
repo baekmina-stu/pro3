@@ -1,0 +1,42 @@
+<div style=""class="JJIT_header">
+    <nav>
+        <div class="header_topic_navbar">
+            <a href="{% url 'projectapp:list' %}" class="header_topic">
+                <span>Study</span>
+            </a>
+            <a href="{% url 'articleapp:list' %}" class="header_topic">
+                <span>Projects</span>
+            </a>
+            <a href="{% url 'jjit:index' %}" class="header_topic">
+                <span>Community</span>
+            </a>
+        </div>
+
+        <div>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'accountapp:login' %}?next={{ request.path }}" class="header_topic">
+                <span>Login</span>
+            </a>
+
+            <a href="{% url 'accountapp:create' %}" class="header_topic">
+                <span>Join</span>
+            </a>
+
+            {% else %}
+
+            <a href="{% url 'plusdefapp:main' %}" class="header_topic">
+                <span>GPT ChatBot</span>
+            </a>
+            <a href="{% url 'chatgptcodeapp:main' %}" class="header_topic">
+                <span>GPT코드</span>
+            </a>
+            <a href="{% url 'accountapp:detail' pk=user.pk %}" class="header_topic">
+                <span>Profile</span>
+            </a>
+            <a href="{% url 'accountapp:logout' %}?next={{ request.path }}" class="header_topic">
+                <span>Sign out</span>
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+</div>

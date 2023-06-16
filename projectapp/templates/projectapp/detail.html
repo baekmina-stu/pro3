@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div>
+        <div style="text-align: center; max-width:500px; margin: 4rem auto 1.5rem auto;">
+            <img src="{{ target_project.image.url }}" alt="" style="height: 12rem; width:12rem; margin-bottom: 2rem; object-fit:cover">
+            <h2>{{ target_project.title }}</h2>
+            <h5 style="margin-bottom:3rem;">{{ target_project.description }}</h5>
+        </div>
+        <div class="text-center mb-5">
+            {% if user.is_authenticated %}
+                {% if not subscription %}
+                    <a href="{% url 'subscribeapp:subscribe' %}?project_pk={{ target_project.pk }}" class="btn btn-primary">
+                        구독
+                    </a>
+                {% else %}
+                    <a href="{% url 'subscribeapp:subscribe' %}?project_pk={{ target_project.pk }}" class="btn btn-danger">
+                        구독취소
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+  {% if article_list %}
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for article in article_list|slice:":12" %}
+                <div class="col">
+                    <div class="card shadow">
+                        <a href="{% url 'articleapp:detail' pk=article.pk %}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ article.title }}</h5>
+                                <div class="d-flex align-items-center">
+                                    <a href="{% url 'likeapp:article_like' pk=article.pk %}">
+                                        <i class="material-icons {% if article.like > 0 %}text-danger{% endif %}" style="color: {% if article.like == 0 %}var(--color-black);{% else %}var(--color-pink);{% endif %}">
+                                            favorite
+                                        </i>
+                                    </a>
+                                    <span class="ms-1">{{ article.like }}</span>
+                                </div>
+                                                                    <div class="d-flex align-items-center">
+                                        <img src="{{ article.writer.profile.image.url }}" class="project-image" alt="{{ article.writer.profile.nickname }}">
+                                        <span class="ms-1">{{ article.writer.profile.nickname }}</span>
+                                    </div>
+
+                                <div class="card-text">
+                                    <h6 class="hits">🖱조회수: {{ article.hits }}</h6>
+                                    <div>{{ article.created_at }}</div>
+
+                                </div>
+
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div class="text-center">
+        <h1>게시글이 존재하지 않습니다.</h1>
+    </div>
+{% endif %}
+
+
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="{% url 'articleapp:create' %}" class="btn btn-primary col-3">
+            글쓰기
+        </a>
+    </div>
+
+    <style>
+        .circle-card {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .circle-img-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-image {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+{% endblock %}

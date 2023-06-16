@@ -1,0 +1,180 @@
+:root {
+    /* Color */
+    --color-white: rgb(255 255 255);
+    --color-light-white: #eeeeee;
+    --color-dark-white: #bdbdbd;
+    --color-pink: #fe918d;
+    --color-dark-pink: #ff6863;
+    --color-black: #4d4d4d;
+    --color-dark-grey: rgb(31 41 55);
+    --color-white-grey: rgb(156, 163, 175);
+    --color-dark-blue: rgb(24, 30, 50);
+
+
+
+    /* Font size */
+    --font-large: 48px;
+    --font-medium: 28px;
+    --font-regular: 18px;
+    --font-small: 16px;
+    --font-micro: 14px;
+
+    /* Font weight */
+    --weight-bold: 700;
+    --weight-semi-bold: 600;
+    --weight-regular: 400;
+
+
+    /* Animation */
+    --animation-duration: 300ms;
+    }
+
+body {
+    color: var(--color-white);
+    background-color: rgb(17 24 39);
+
+}
+
+h1,h2,h3,h4 {
+    color: var(--color-white);
+}
+
+h6 {
+    color: var(--color-white-grey);
+}
+p {
+    color: var(--color-white);
+}
+
+label {
+    color: var(--color-white-grey);
+}
+
+a {
+    color: var(--color-white);
+}
+
+a:hover {
+    color:black;
+
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+
+}
+
+
+
+span {
+    color: var(--color-white-grey);
+}
+
+.material-icons {
+    color: var(--color-white);
+}
+
+.material-icons.favorite {
+    color: var(--color-pink);
+}
+
+.material-icons.favorite.text-danger {
+    color: var(--color-dark-white);
+}
+
+
+
+/* JJIT_header파일 navbar부분 */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-dark-grey);
+    padding: 8px;
+    font-weight: 800;
+    margin-bottom: 20px;
+
+}
+
+.JJIT_header {
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    margin: 0px 0px 5px 0px;
+}
+/*---------------articleapp 수정----------------- */
+.card-title {
+  color: var(--color-black);
+  font-weight: var(--weight-bold);
+  font-size: 24px;
+
+}
+
+/* projectapp/templates/projectapp/list.html */
+
+.tech h3 {
+    text-align: center;
+    font-size: 30px;
+}
+
+.tech_list {
+    text-align: center;
+}
+
+    margin: auto;
+    background-color: var(--color-dark-grey);
+    border-radius
+.container {
+: var(--size-border-radius);
+}
+
+
+/* projectapp/templates/projectapp/detail.html */
+.category_description {
+ color: var(--color-white);
+}
+
+/* templates/snippets/card_project.html */
+.category_img {
+    padding: 10px;
+}
+
+.category_title {
+    text-align: center;
+}
+
+
+/*-------------------------------- */
+
+/* accountapp/templates/accountapp/login.html */
+.empty-form {
+    height: 200px;
+}
+
+.login_form {
+    max-width: 500px;
+    margin: 4rem auto;
+    background-color: #eeeeee;
+}
+/*-------------------------------- */
+.JJIT_footer_button {
+    font-size: 1rem;
+}
+
+.JJIT_footer {
+    text-align: center;
+    margin-top:2rem;
+}
+
+.header_topic {
+    margin: 0.5rem;
+}
+
+.header_topic_navbar {
+    margin:1rem 0;
+}

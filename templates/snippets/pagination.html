@@ -1,0 +1,51 @@
+<div style="text-align: center; margin: 1rem 0;">
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}"
+      class="btn btn-secondary">
+      &laquo;
+    </a>
+  {% endif %}
+
+  {% for i in paginator.page_range %}
+    {% if page_obj.number == i %}
+      <a href="?page={{ i }}" class="btn btn-primary">{{ i }}</a>
+    {% elif i > page_obj.number|add:"-3" and i < page_obj.number|add:"3" %}
+      <a href="?page={{ i }}" class="btn btn-secondary">{{ i }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}"
+      class="btn btn-secondary">
+      &raquo;
+    </a>
+  {% endif %}
+
+{% if paginator.num_pages > 0 %}
+    <input type="number" id="go_page" min="1" max="{{ paginator.num_pages }}" style="margin-left: 0rem; width: 35px;">
+    <button id="btn_go" class="btn btn-primary" style="margin-left: 0rem;">Go</button>
+{% endif %}
+</div>
+
+<script>
+  // 현재 페이지 번호
+  let currentPage = {{ page_obj.number }};
+  // 찾기 버튼 클릭 시 이벤트 핸들러
+  document.getElementById("btn_search").addEventListener("click", () => {
+    // 검색어 가져오기
+    let kw = document.getElementById("search_kw").value;
+    // 페이지 이동
+    window.location.href = "?page=" + currentPage + "&kw=" + kw;
+  });
+
+  // Go 버튼 클릭 시 이벤트 핸들러
+  document.getElementById("btn_go").addEventListener("click", () => {
+    // 입력한 페이지 번호 가져오기
+    let goPage = document.getElementById("go_page").value;
+    // 유효한 페이지 번호인지 확인
+    if (goPage >= 1 && goPage <= {{ paginator.num_pages }}) {
+      // 페이지 이동
+      window.location.href = "?page=" + goPage;
+    }
+  });
+</script>

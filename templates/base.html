@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% include 'head.html' %}
+
+<body>
+{% include 'navbar.html' %}
+
+    {% include 'header.html' %}
+
+    {% for message in messages %}
+        <div class="text-center">
+        <div class="btn btn-{{ message.tags }} px-3 my-3">
+            {{ message }}
+
+        </div>
+    </div>
+
+    {% endfor %}
+    {% block content %}
+    {% endblock %}
+
+    {% include 'footer.html' %}
+</body>
+</html>

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="study_description"
+         style="padding-bottom: 20px">
+        <h1>Join to Service</h1>
+    </div>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6"style="width: 100%">
+        <div class="card shadow-sm"
+             style="background-color: rgb(17 24 39);
+                    width: 100%;
+                    border: 0px;
+                    border-radius: 0%;"
+        >
+          <div class="card-body" style="background-color: rgb(31 41 55); width: 300px">
+            <form action="{% url 'accountapp:create' %}" method="POST" onsubmit="return validateForm()">
+              {% csrf_token %}
+              <div class="form-group" style="width: 260px">
+                <label for="username" style="color: rgb(156, 163, 175)">ID</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="아이디를 입력하세요">
+              </div>
+              <div class="form-group" style="margin-top:1rem">
+                <label for="password1" style="color: rgb(156, 163, 175)">Password</label>
+                <input type="password" name="password1" id="password1" class="form-control" placeholder="비밀번호를 입력하세요">
+              </div>
+              <div class="form-group" style="margin-top:1rem">
+                <label for="password2" style="color: rgb(156, 163, 175)">Comfirm password</label>
+                <input type="password" name="password2" id="password2" class="form-control" placeholder="비밀번호를 다시 입력하세요">
+              </div>
+              <div class="text-center">
+                <button class="btn btn-primary mx-auto"
+                        style="margin-top:2rem;
+                               background-color: antiquewhite;
+                               color: black;
+                               font-family: inherit;
+                               font-weight: 800;
+                               font-size: .875rem;"
+                >Create Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    function validateForm() {
+      var username = document.getElementById("username").value;
+      var password1 = document.getElementById("password1").value;
+      var password2 = document.getElementById("password2").value;
+      var password2Label = document.querySelector('label[for="password2"]');
+
+      if (username == "") {
+        alert("아이디를 입력하세요");
+        return false;
+      }
+      if (password1 == "") {
+        alert("비밀번호를 입력하세요");
+        return false;
+      }
+      if (password2 == "") {
+        alert("비밀번호 확인을 입력하세요");
+        return false;
+      }
+      if (password1 !== password2) {
+        password2Label.innerHTML += ' <span style="color:red;">(입력하신 비밀번호와 다릅니다)</span>';
+        return false;
+      }
+      return true;
+    }
+  </script>
+{% endblock %}

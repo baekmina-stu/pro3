@@ -1,0 +1,8 @@
+         <div style="display: block">
+    {% if article.image %}
+        <img src="{{ article.image.url }}" alt="">
+    {% endif %}
+    <h6 class="mt-2">
+        {{ article.title | truncatechars:10 }}
+    </h6>
+</div>

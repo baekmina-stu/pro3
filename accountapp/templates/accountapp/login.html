@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load socialaccount %}  <!-- socialaccount 태그 라이브러리 로드 -->
+{% providers_media_js %}  <!-- socialaccount 미디어 JavaScript 파일 포함 -->
+
+{% block content %}
+    <div style="max-width: 500px; margin: 4rem auto;">
+        <div>
+            <h2 style="text-align: center; font-weight: 800;">Log in to Service</h2>
+        </div>
+        <div style="margin-top: 32px">
+            <form style="justify-items: center" action="" method="POST" name="loginForm">
+                {% csrf_token %}
+                <div style="background-color: rgb(31 41 55);
+                            padding: 32px 40px;
+                            border: 5px solid rgb(31 41 55);
+                            border-radius: 5%"
+                     class="login_input">
+
+                    <div class="form_group">
+                        <label style="color: rgb(156, 163, 175)" for="id_username">ID</label>
+                        <input type="text" name="username" id="id_username" class="form-control" placeholder="아이디를 입력하세요">
+                    </div>
+
+                    <div class="form-group" style="margin-top:1rem">
+                        <label style="color: rgb(156, 163, 175)" for="id_password">PassWord</label>
+                        <input type="password" name="password" id="id_password" class="form-control" placeholder="비밀번호를 입력하세요">
+                    </div>
+
+                    <div style="margin-top: 20px;" class="text-center">
+                        <input type="submit"
+                               style="background-color: white;
+                                      color: black;
+                                      font-family: inherit;
+                                      font-weight: 800;
+                                      font-size: .875rem;"
+                               class="btn btn-success rounded-pill col-4 mt-3"
+                               onclick="return validateForm();"
+                               value="Continue →"
+                        >
+                    </div>
+                </div>
+
+                <div style="display: flex;">
+                    <div style="content:'';
+                                width: 230px;
+                                border-bottom: 2px solid rgb(156 163 175);"
+                    >
+                    </div>
+                    <span style="margin-left: 1.25rem;
+                                margin-right: 1.25rem;
+                                margin-top: 1.25rem;"
+                    >
+                        OR
+                    </span>
+                    <div style="content:'';
+                                width: 230px;
+                                border-bottom: 2px solid rgb(156 163 175);"
+                    >
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;" class="text-center">
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-success rounded-pill mt-3" style="background-color: rgb(66, 133, 244); color: black; font-family: inherit; font-weight: 800; font-size: 0.875rem;">
+                        <i class="fa-solid fa-comment"></i>
+                        Google login →
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            const username = document.forms["loginForm"]["username"].value;
+            const password = document.forms["loginForm"]["password"].value;
+            if (username == "") {
+                alert("아이디를 입력하세요");
+                return false;
+            }
+            if (password == "") {
+                alert("비밀번호를 입력하세요");
+                return false;
+            }
+        }
+    </script>
+{% endblock %}
