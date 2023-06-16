@@ -8,7 +8,7 @@ import openai
 from .models import ChatGptBot
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-openai.api_key = "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"
+openai.api_key = "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"
 
 def hello_world(request):
 

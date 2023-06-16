@@ -7,6 +7,8 @@ from projectapp.forms import ProjectCreationForm
 from projectapp.models import Project
 from subscribeapp.models import Subscription
 
+import requests
+from bs4 import BeautifulSoup
 
 class ProjectCreateView(CreateView):
     model = Project
@@ -36,6 +38,10 @@ class ProjectDetailView(DetailView):
         article_list = Article.objects.filter(project=project)
         context['article_list'] = article_list
 
+        # Crawl data from external sources
+        inflearn_posts, soup_posts = crawl_inflearn_soup(project.title)
+        context['inflearn_posts'] = inflearn_posts
+        context['soup_posts'] = soup_posts
 
         return context
 
@@ -54,3 +60,37 @@ class ProjectListView(ListView):
         context['article_list'] = article_list
 
         return context
+
+
+def crawl_inflearn_soup(title):
+    inflearn_url = f'https://www.inflearn.com/community/studies?status=unrecruited&tag={title}&order=recent'
+    soup_url = 'https://soup.pw/projects'
+
+    inflearn_response = requests.get(inflearn_url)
+    soup_response = requests.get(soup_url)
+
+    if inflearn_response.status_code == 200 and soup_response.status_code == 200:
+        inflearn_soup = BeautifulSoup(inflearn_response.content, 'html.parser')
+        soup_soup = BeautifulSoup(soup_response.content, 'html.parser')
+
+        inflearn_posts = []
+        e_click_posts = inflearn_soup.find_all(class_='e-click-post')
+        for post in e_click_posts[:5]:
+            title = post.find(class_='title__text').get_text()
+            body = post.find(class_='question__body').get_text()[:30] + "..."
+            if "[개발 스터디 모집 내용 예시]" not in title:
+                inflearn_posts.append({
+                    'title': title,
+                    'body': body
+                })
+
+        soup_posts = []
+        study_items = soup_soup.find_all(class_='css-1089e3a')
+        for item in study_items[:5]:
+            content = item.get_text()
+            soup_posts.append({
+                'content': content
+            })
+
+        return inflearn_posts, soup_posts
+

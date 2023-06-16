@@ -8,9 +8,11 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView,
 from django.views.generic.edit import FormMixin
 from articleapp.decorators import article_ownership_required
 from articleapp.forms import ArticleCreationForm
-from articleapp.models import Article
 from commentapp.forms import CommentCreationForm
 from django.utils import timezone
+from django import forms
+from django.shortcuts import get_object_or_404
+from .models import Article, Category
 
 
 # Create your views here.
@@ -22,15 +24,23 @@ class ArticleCreateView(CreateView):
     form_class = ArticleCreationForm
     template_name = 'articleapp/create.html'
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['category'] = forms.ModelChoiceField(queryset=Category.objects.all())
+        return form
+
     def form_valid(self, form):
         article = form.save(commit=False)
         article.writer = self.request.user
         article.created_at = timezone.now()
+        article.category = form.cleaned_data['category']
         article.save()
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('articleapp:detail', kwargs={'pk': self.object.pk})
+
+
 
 
 class ArticleDetailView(DetailView, FormMixin):
@@ -84,6 +94,8 @@ class ArticleDeleteView(DeleteView):
     template_name = 'articleapp/delete.html'
 
 
+
+
 class ArticleListView(ListView):
     model = Article
     context_object_name = 'article_list'
@@ -94,6 +106,12 @@ class ArticleListView(ListView):
         context = super().get_context_data(**kwargs)
         context['created_at_list'] = [article.created_at for article in context['article_list']]
         context['hits_list'] = [article.hits for article in context['article_list']]
+        context['category_list'] = Category.objects.all()
+        category_name = self.kwargs.get('category_name')
+        if category_name:
+            category = get_object_or_404(Category, name=category_name)
+            context['category'] = category
+            context['category_description'] = category.description
         return context
 
     def get_queryset(self):
@@ -103,11 +121,25 @@ class ArticleListView(ListView):
         # 정렬 옵션 가져오기
         sort_by = self.request.GET.get('sort_by', '-created_at')
 
-        if kw:
-            article_list = article_list.filter(
-                Q(title__icontains=kw) |
-                Q(content__icontains=kw)
-            ).distinct()
+        category_name = self.kwargs.get('category_name', '스터디')
+        if category_name == '스터디':
+            # 기본 카테고리인 경우 모든 글을 가져옴
+            if kw:
+                article_list = article_list.filter(
+                    Q(title__icontains=kw) |
+                    Q(content__icontains=kw)
+                ).distinct()
+        else:
+            # 특정 카테고리인 경우 해당 카테고리의 글만 가져옴
+            category = get_object_or_404(Category, name=category_name)
+            if kw:
+                article_list = article_list.filter(
+                    Q(title__icontains=kw) |
+                    Q(content__icontains=kw),
+                    category=category
+                ).distinct()
+            else:
+                article_list = article_list.filter(category=category)
 
         # 정렬 기능 추가
         if sort_by == 'like':

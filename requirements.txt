@@ -1,4 +1,5 @@
-aiohttp
+psycopg2-binary==2.9.6
+aiohttp==3.8.4
 aiosignal==1.3.1
 asgiref==3.7.2
 async-timeout==4.0.2
@@ -6,10 +7,10 @@ attrs==23.1.0
 beautifulsoup4==4.12.2
 bleach==3.3.1
 certifi==2023.5.7
-cffi
+cffi==1.15.1
 charset-normalizer==3.1.0
 colorama==0.4.6
-cryptography
+cryptography==41.0.1
 defusedxml==0.7.1
 Django==4.2.2
 django-allauth==0.54.0
@@ -28,9 +29,9 @@ oauthlib==3.2.2
 openai==0.27.7
 packaging==23.1
 Pillow==9.5.0
-psycopg2-binary==2.9.6
 pycparser==2.21
 PyJWT==2.7.0
+python-dotenv==1.0.0
 python3-openid==3.2.0
 requests==2.31.0
 requests-oauthlib==1.3.1
@@ -44,5 +45,3 @@ urllib3==2.0.2
 webencodings==0.5.1
 websocket-client==1.5.3
 yarl==1.9.2
-psycopg2==2.9.6
-python-dotenv==1.0.0

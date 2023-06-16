@@ -9,11 +9,12 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from django.views.generic.list import MultipleObjectMixin
 from django.views.generic import DetailView
 from subscribeapp.models import Subscription
-
 from accountapp.decorators import account_ownership_required
 from accountapp.forms import AccountUpdateForm
-
 from articleapp.models import Article
+
+
+
 
 has_ownership = [login_required, account_ownership_required]
 
@@ -31,6 +32,8 @@ class AccountCreateView(CreateView):
     # 어느 html파일로 갈지
 
 
+
+
 class AccountDetailView(DetailView, MultipleObjectMixin):
     model = User
     context_object_name = 'target_user'
@@ -39,15 +42,17 @@ class AccountDetailView(DetailView, MultipleObjectMixin):
 
     def get_context_data(self, **kwargs):
         object_list = Article.objects.filter(writer=self.get_object())
-        return super(AccountDetailView, self).get_context_data(object_list=object_list, **kwargs)
 
-    def get_context_data(self, **kwargs):
         subscription_list = Subscription.objects.filter(user=self.get_object())
         projects = subscription_list.values_list('project', flat=True)
-        object_list = Article.objects.filter(project__in=projects)
+        subscription_articles = Article.objects.filter(project__in=projects)
+
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['subscription_list'] = subscription_list
+        context['subscription_articles'] = subscription_articles
         return context
+
+
 
 @method_decorator(has_ownership, 'get')
 @method_decorator(has_ownership, 'post')

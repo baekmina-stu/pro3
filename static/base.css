@@ -64,6 +64,12 @@ table {
     width: 100%;
 }
 
+
+.card.shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
 th, td {
     border: 1px solid black;
     padding: 8px;
@@ -89,6 +95,10 @@ span {
 }
 
 
+
+sidebar {
+     color: var(--color-white-grey);
+}
 
 /* JJIT_header파일 navbar부분 */
 nav {

@@ -73,7 +73,6 @@ INSTALLED_APPS = [
     'subscribeapp',
     'likeapp',
 
-
     # allauth #추가
     'allauth',
     'allauth.account',

@@ -1,3 +1,4 @@
+<!-- detail.html -->
 {% extends 'base.html' %}
 {% block content %}
     <div>
@@ -6,54 +7,127 @@
                 {{ target_user.date_joined }}
             </p>
 
-            <!--유저가 프로필이 있다면-->
+            <!-- 유저가 프로필이 있다면 -->
             {% if target_user.profile %}
-            <img style="height:8rem; width:8rem; border-radius: 50px; margin-bottom: 2rem; object-fit: cover"
-                       src="{{ target_user.profile.image.url }}" alt="">
-            <h2>
-                {{ target_user.profile.nickname }}
-                  {% if target_user == user %}
-                    <a class="material-icons"
-                            style="box-shadow: 0 0 4px #ccc; border-radius:10rem; padding: .4rem;"
-                             href="{% url 'profileapp:update' pk=target_user.profile.pk %}">
-                    edit</a>
-                  {% endif %}
-            </h2>
-            <h4 style="margin: 2rem">
-                {{ target_user.profile.message }}
-            </h4>
+                <img style="height:8rem; width:8rem; border-radius: 50px; margin-bottom: 2rem; object-fit: cover"
+                     src="{{ target_user.profile.image.url }}" alt="">
+                <h2>
+                    {{ target_user.profile.nickname }}
+                    {% if target_user == user %}
+                        <a class="material-icons"
+                           style="box-shadow: 0 0 4px #ccc; border-radius:10rem; padding: .4rem;"
+                           href="{% url 'profileapp:update' pk=target_user.profile.pk %}">
+                            edit
+                        </a>
+                    {% endif %}
+                </h2>
+                <h4 style="margin: 2rem">
+                    {{ target_user.profile.message }}
+                </h4>
             {% else %}
-             {% if target_user == user %}
-                <a href="{% url 'profileapp:create' %}">
+                {% if target_user == user %}
+                    <a href="{% url 'profileapp:create' %}">
+                        <h2>
+                            create Profile
+                        </h2>
+                    </a>
+                {% else %}
                     <h2>
-                    create Profile
+                        프로필 없음
                     </h2>
-                </a>
-              {% else %}
-                 <h2>
-                    프로필 없음
-                 </h2>
-              {% endif %}
+                {% endif %}
             {% endif %}
 
-            <!--유저가 접속에 성공하면, 회원정보수정 및 회원탈퇴 보여주기-->
+            <!-- 유저가 접속에 성공하면, 회원정보수정 및 회원탈퇴 보여주기 -->
             {% if target_user == user %}
-               <a class="material-icons"
-                style="box-shadow: 0 0 4px #ccc; border-radius:10rem; padding: .4rem;"
-                 href="{% url 'accountapp:update' pk=user.pk %}">
-                settings
+                <a class="material-icons"
+                   style="box-shadow: 0 0 4px #ccc; border-radius:10rem; padding: .4rem;"
+                   href="{% url 'accountapp:update' pk=user.pk %}">
+                    settings
                 </a>
 
                 <a class="material-icons"
-                 style="box-shadow: 0 0 4px red; border-radius:10rem; padding: .4rem;"
-                href="{% url 'accountapp:delete' pk=user.pk %}">
-                cancel
+                   style="box-shadow: 0 0 4px red; border-radius:10rem; padding: .4rem;"
+                   href="{% url 'accountapp:delete' pk=user.pk %}">
+                    cancel
                 </a>
             {% endif %}
         </div>
-    <div>
-        {% include 'snippets/list_firstProject.html' with article_list=object_list %}
+    </div>
+    <hr>
+<h3>내가 쓴 글</h3>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for article in object_list|slice:":12" %}
+                <!-- object_list를 12개로 제한 -->
+                <div class="col">
+                    <div class="card shadow">
+                        <a href="{% url 'articleapp:detail' pk=article.pk %}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ article.title }}</h5>
+                                <div class="d-flex align-items-center">
+                                    <a href="{% url 'likeapp:article_like' pk=article.pk %}">
+                                        <i class="material-icons {% if article.like > 0 %}text-danger{% endif %}"
+                                           style="color: {% if article.like == 0 %}var(--color-black);{% else %}var(--color-pink);{% endif %}">
+                                            favorite
+                                        </i>
+                                    </a>
+                                    <span class="ms-1">{{ article.like }}</span>
+                                </div>
+                                <div class="card-text">
+                                    <div class="mb-2">{{ article.writer.profile.nickname }}</div>
+                                    <h6 class="hits">🖱조회수: {{ article.hits }}</h6>
+                                    <div>{{ article.created_at }}</div>
+                                </div>
+                                <img src="{{ article.project.image.url }}" class="project-image" alt="">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
-    </div>
+    <hr>
+
+<!-- 수정된 코드 -->
+<h3>구독</h3>
+<ul>
+    {% for subscription_article in subscription_articles %}
+        <li>
+            <a href="{% url 'projectapp:detail' pk=subscription_article.project.pk %}">
+                <img src="{{ subscription_article.project.image.url }}" class="project2-image" alt="">
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+
+
+ <style>
+        .circle-card {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .circle-img-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-image {
+            width: 20px;
+            height: 20px;
+        }
+
+        .project2-image {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
 {% endblock %}

@@ -10,4 +10,6 @@ urlpatterns =[
     path('detail/<int:pk>', ArticleDetailView.as_view(), name='detail'),
     path('update/<int:pk>', ArticleUpdateView.as_view(), name='update'),
     path('delete/<int:pk>', ArticleDeleteView.as_view(), name='delete'),
+    path('articles/list/<str:category_name>/', ArticleListView.as_view(), name='list'),
+
 ]

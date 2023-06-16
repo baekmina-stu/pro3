@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
-    <div>
+
+      <div>
         <div style="text-align: center; max-width:500px; margin: 4rem auto 1.5rem auto;">
             <img src="{{ target_project.image.url }}" alt="" style="height: 12rem; width:12rem; margin-bottom: 2rem; object-fit:cover">
             <h2>{{ target_project.title }}</h2>
@@ -21,54 +23,102 @@
             {% endif %}
         </div>
 
-  {% if article_list %}
+    {% if project_list %}
     <div class="container">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for article in article_list|slice:":12" %}
-                <div class="col">
-                    <div class="card shadow">
-                        <a href="{% url 'articleapp:detail' pk=article.pk %}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ article.title }}</h5>
-                                <div class="d-flex align-items-center">
-                                    <a href="{% url 'likeapp:article_like' pk=article.pk %}">
-                                        <i class="material-icons {% if article.like > 0 %}text-danger{% endif %}" style="color: {% if article.like == 0 %}var(--color-black);{% else %}var(--color-pink);{% endif %}">
-                                            favorite
-                                        </i>
-                                    </a>
-                                    <span class="ms-1">{{ article.like }}</span>
-                                </div>
-                                                                    <div class="d-flex align-items-center">
-                                        <img src="{{ article.writer.profile.image.url }}" class="project-image" alt="{{ article.writer.profile.nickname }}">
-                                        <span class="ms-1">{{ article.writer.profile.nickname }}</span>
-                                    </div>
-
-                                <div class="card-text">
-                                    <h6 class="hits">🖱조회수: {{ article.hits }}</h6>
-                                    <div>{{ article.created_at }}</div>
-
-                                </div>
-
-                            </div>
-                        </a>
+        <div class="row">
+            {% for project in project_list %}
+            <div class="col-3"> <!--4열 -->
+                <a href="{% url 'projectapp:detail' pk=project.pk %}">
+                    <div class="circle-card shadow">
+                        <div class="circle-img-wrapper">
+                            <img src="{{ project.image.url }}" class="card-img-top" alt="">
+                        </div>
                     </div>
-                </div>
+                </a>
+            </div>
+            {% if forloop.counter|divisibleby:4 %} <!-- 추가: 4열마다 줄 바꿈 -->
+        </div><div class="row">
+            {% endif %}
             {% endfor %}
         </div>
     </div>
-{% else %}
-    <div class="text-center">
-        <h1>게시글이 존재하지 않습니다.</h1>
-    </div>
-{% endif %}
 
+    {% endif %}
 
-    </div>
+    <hr> <!-- 구분 선 -->
 
-    <div class="text-center mt-3">
-        <a href="{% url 'articleapp:create' %}" class="btn btn-primary col-3">
-            글쓰기
-        </a>
+    <div class="row">
+        <div class="col-9">
+            {% if article_list %}
+            <div class="container">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for article in article_list|slice:":12" %}
+                    <div class="col">
+                        <div class="card shadow">
+                            <a href="{% url 'articleapp:detail' pk=article.pk %}">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="font-size: 16px;">{{ article.title }}</h5>
+                                    <div class="d-flex align-items-center">
+                                        <a href="{% url 'likeapp:article_like' pk=article.pk %}">
+                                            <i class="material-icons {% if article.like > 0 %}text-danger{% endif %}" style="color: {% if article.like == 0 %}var(--color-black);{% else %}var(--color-pink);{% endif %}">
+                                                favorite
+                                            </i>
+                                        </a>
+                                        <span class="ms-1" style="font-size: 12px;">{{ article.like }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ article.writer.profile.image.url }}" class="project-image" alt="{{ article.writer.profile.nickname }}">
+                                        <span class="ms-1" style="font-size: 12px;">{{ article.writer.profile.nickname }}</span>
+                                    </div>
+                                    <div class="card-text">
+                                        <h6 class="hits" style="font-size: 12px;">🖱조회수: {{ article.hits }}</h6>
+                                        <div style="font-size: 12px;">{{ article.created_at }}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center">
+                <h1>게시글이 존재하지 않습니다.</h1>
+            </div>
+            {% endif %}
+            <div class="text-center mt-3">
+                <a href="{% url 'articleapp:create' %}" class="btn btn-primary col-12" style="font-size: 14px;">
+                    글쓰기
+                </a>
+            </div>
+        </div>
+        <div class="col-3">
+            <h6 style="text-align: center;">인프런과 스프의 {{ target_project.title }} 최근 글</h6>
+            <table style="width: 80%; float: right;">
+                <thead>
+                    <tr>
+                        {% if inflearn_posts or soup_posts %}
+                        {% if inflearn_posts %}
+                        {% endif %}
+                        {% if soup_posts %}
+                        {% endif %}
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in inflearn_posts %}
+                    <tr>
+                        <td><a href="https://www.inflearn.com/community/studies?status=unrecruited&order=recent">{{ post.title }}</a></td>
+                    </tr>
+                    {% endfor %}
+                    {% for post in soup_posts %}
+                    <tr>
+                        <td><a href="https://soup.pw/projects">{{ post.content }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <style>

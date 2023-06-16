@@ -2,71 +2,96 @@
 {% load static %}
 {% block content %}
 
+<div class="container my-3">
+    <div class="row justify-content-center">
+        <div class="col-sm-5 col-md-1 col-lg-2 p-2">
 
-<div class="container">
-    <!-- 검색창 -->
-    <div class="search-bar my-3" style="max-width: 350px; margin-left: auto;">
-        <div class="d-flex justify-content-end mb-3">
-            <input type="text" id="search_kw" class="form-control" placeholder="제목 또는 내용으로 검색" value="{{ kw|default_if_none:'' }}">
-            <div class="input-group">
-                <button class="btn btn-primary" type="button" id="btn_search">검색</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 정렬바 -->
-    <div class="row mb-3">
-        <div class="col">
-            <label for="sort"></label>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary" value="-hits" onclick="handleSortChange(this.value)">
-                    <i class="bi bi-bar-chart-line"></i> 조회수
-                </button>
-                <button type="button" class="btn btn-primary" value="like" onclick="handleSortChange(this.value)">
-                    <i class="bi bi-heart"></i> 좋아요
-                </button>
-                <button type="button" class="btn btn-primary" value="created_at" onclick="handleSortChange(this.value)">
-                    <i class="bi bi-clock"></i> 오래된 순
-                </button>
-            </div>
-        </div>
-    </div>
-
-    {% if article_list %}
-    <!-- 게시글 목록 -->
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for article in article_list %}
-        <div class="col">
-            <div class="card shadow">
-                <a href="{% url 'articleapp:detail' pk=article.pk %}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ article.title }}</h5>
-                        <div class="d-flex align-items-center">
-                            <a href="{% url 'likeapp:article_like' pk=article.pk %}">
-                                <i class="material-icons {% if article.like > 0 %}text-danger{% endif %}" style="color: {% if article.like == 0 %}var(--color-black);{% else %}var(--color-pink);{% endif %}">
-                                    favorite
-                                </i>
-                            </a>
-                            <span class="ms-1">{{ article.like }}</span>
-                        </div>
-                        <div class="card-text">
-                            <div class="mb-2">{{ article.writer.profile.nickname }}</div>
-                            <h6 class="hits">🖱조회수: {{ article.hits }}</h6>
-                            <div>{{ article.created_at }}</div>
-                        </div>
-                        <img src="{{ article.project.image.url }}" class="project-image" alt="">
-                    </div>
-                </a>
-            </div>
-        </div>
+      <!-- Sidebar -->
+<nav id="sidebar" class="border-top border-secondary">
+    <div class="list-group justify-content-center">
+        {% for cat in category_list|dictsort:'name' %}
+            {% if cat == category %}
+                <a class="rounded-0 list-group-item list-group-item-action list-group-item-light text-black text-center" style="background-color: #9ca3af ;" href="{% url 'articleapp:list' cat.name %}">{{ cat.name }}</a>
+            {% else %}
+                <a class="rounded-0 list-group-item list-group-item-action list-group-item-light text-black text-center" style="background-color: #9ca3af ;" href="{% url 'articleapp:list' cat.name %}">{{ cat.name }}</a>
+            {% endif %}
         {% endfor %}
     </div>
-    {% else %}
-    <div class="text-center">
-        <h1>게시글이 존재하지 않습니다.</h1>
-    </div>
-    {% endif %}
+</nav>
+
 </div>
+
+
+
+        <div class="col-sm-12 col-md-9 col-lg-10 p-2">
+            <!-- Content -->
+            <div id="content" class="border-top border-secondary">
+                <div class="content_block">
+                    <h5 class="border-bottom pl-2 pb-3 my-2">{{ category.description }}</h5>
+                    <div class="row justify-content-between my-3">
+
+                        <!-- 검색창 -->
+                        <div class="search-bar my-3" style="max-width: 350px; margin-left: auto;">
+                            <div class="d-flex justify-content-end mb-3">
+                                <input type="text" id="search_kw" class="form-control" placeholder="제목 또는 내용으로 검색" value="{{ kw|default_if_none:'' }}">
+                                <div class="input-group">
+                                    <button class="btn btn-primary" type="button" id="btn_search">검색</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 정렬바 -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="sort"></label>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary" value="-hits" onclick="handleSortChange(this.value)">
+                                        <i class="bi bi-bar-chart-line"></i> 조회수
+                                    </button>
+                                    <button type="button" class="btn btn-primary" value="like" onclick="handleSortChange(this.value)">
+                                        <i class="bi bi-heart"></i> 좋아요
+                                    </button>
+                                    <button type="button" class="btn btn-primary" value="created_at" onclick="handleSortChange(this.value)">
+                                        <i class="bi bi-clock"></i> 오래된 순
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+{% if article_list %}
+<!-- 게시글 목록 -->
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for article in article_list %}
+    <div class="col">
+        <div class="card shadow">
+            <a href="{% url 'articleapp:detail' pk=article.pk %}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <div class="d-flex align-items-center">
+                        <a href="{% url 'likeapp:article_like' pk=article.pk %}">
+                            <i class="material-icons {% if article.like > 0 %}text-danger{% endif %}" style="color: {% if article.like == 0 %}var(--color-black);{% else %}var(--color-pink);{% endif %}">
+                                favorite
+                            </i>
+                        </a>
+                        <span class="ms-1">{{ article.like }}</span>
+                    </div>
+                    <div class="card-text">
+                        <div class="mb-2" style="font-size: 12px;">{{ article.writer.profile.nickname }}</div>
+                        <h6 class="hits" style="font-size: 10px;">🖱조회수: {{ article.hits }}</h6>
+                        <div style="font-size: 10px;">{{ article.created_at }}</div>
+                    </div>
+                    <img src="{{ article.project.image.url }}" class="project-image" alt="">
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center">
+    <h1>게시글이 존재하지 않습니다.</h1>
+</div>
+{% endif %}
+
 
 {% include 'snippets/pagination.html' with page_obj=page_obj %}
 
@@ -101,7 +126,6 @@
     const sortByParam = new URLSearchParams(window.location.search).get('sort_by');
     sortSelect.value = sortByParam;
 </script>
-</div>
 {% endblock %}
 
 {% block script %}
